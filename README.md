@@ -1,4 +1,4 @@
-# NGO Hope Website
+# Ek Nayi Pahal Website
 
 A professional, scalable website for an NGO to manage its public presence and organize community events (like eye check-up camps).
 
