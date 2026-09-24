@@ -94,6 +94,10 @@ func main() {
 		renderTemplate(w, "donate", map[string]interface{}{"Title": "Donate Now"})
 	})
 
+	mux.HandleFunc("/admin", func(w http.ResponseWriter, r *http.Request) {
+		renderTemplate(w, "admin_dashboard", map[string]interface{}{"Title": "Admin Dashboard"})
+	})
+
 	// Admin API Routes (Protected)
 	mux.HandleFunc("/api/admin/events", middleware.AdminAuth(adminH.CreateEvent))
 	mux.HandleFunc("/api/admin/events/delete", middleware.AdminAuth(adminH.DeleteEvent))
