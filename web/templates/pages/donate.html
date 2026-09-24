@@ -1,0 +1,32 @@
+{{ define "content" }}
+<div class="py-20 px-4 max-w-4xl mx-auto text-center">
+    <h1 class="text-4xl font-bold text-gray-800 mb-6">Support Our Cause</h1>
+    <p class="text-xl text-gray-600 mb-12">Your contribution directly funds our medical camps and educational materials. Every bit helps bring a smile and health to someone in need.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
+        <div class="p-6 bg-white rounded-2xl border-2 border-gray-100 hover:border-blue-500 transition cursor-pointer group">
+            <h3 class="text-lg font-bold mb-2">Basic Support</h3>
+            <p class="text-3xl font-extrabold text-blue-600 mb-4">$25</p>
+            <p class="text-sm text-gray-500 group-hover:text-gray-700">Funds one eye screening</p>
+        </div>
+        <div class="p-6 bg-white rounded-2xl border-2 border-blue-500 shadow-lg scale-105 transition cursor-pointer">
+            <h3 class="text-lg font-bold mb-2">Community Hero</h3>
+            <p class="text-3xl font-extrabold text-blue-600 mb-4">$100</p>
+            <p class="text-sm text-gray-500">Funds a small medical camp</p>
+        </div>
+        <div class="p-6 bg-white rounded-2xl border-2 border-gray-100 hover:border-blue-500 transition cursor-pointer group">
+            <h3 class="text-lg font-bold mb-2">Visionary</h3>
+            <p class="text-3xl font-extrabold text-blue-600 mb-4">$500</p>
+            <p class="text-sm text-gray-500 group-hover:text-gray-700">Sponsors a full cataract surgery</p>
+        </div>
+    </div>
+
+    <div class="bg-gray-100 p-8 rounded-3xl inline-block w-full max-w-md border border-gray-200">
+        <h3 class="text-xl font-bold mb-4">Custom Donation</h3>
+        <div class="flex space-x-2">
+            <input type="number" placeholder="Enter amount" class="flex-grow px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+            <button class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition">Donate</button>
+        </div>
+    </div>
+</div>
+{{ end }}

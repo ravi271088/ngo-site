@@ -1,0 +1,187 @@
+{{ define "content" }}
+<div class="py-12 px-4 max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-12">
+        <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <div class="flex space-x-4">
+            <button onclick="toggleModal('event-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">+ Add Event</button>
+            <button onclick="toggleModal('image-modal')" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition">+ Add Gallery Image</button>
+        </div>
+    </div>
+
+    <!-- Events Section -->
+    <div class="mb-16">
+        <h2 class="text-2xl font-bold mb-6 text-gray-700">Manage Events</h2>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th class="px-6 py-4 font-semibold text-gray-600">Event Name</th>
+                        <th class="px-6 py-4 font-semibold text-gray-600">Date</th>
+                        <th class="px-6 py-4 font-semibold text-gray-600">Location</th>
+                        <th class="px-6 py-4 font-semibold text-gray-600 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="events-table-body" class="divide-y divide-gray-100">
+                    <!-- Events will be loaded here via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <div>
+        <h2 class="text-2xl font-bold mb-6 text-gray-700">Manage Gallery</h2>
+        <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Images will be loaded here via JS -->
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-2xl max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-6">Create New Event</h3>
+            <form id="event-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" id="event-title" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="event-desc" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Date</label>
+                    <input type="datetime-local" id="event-date" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Location</label>
+                    <input type="text" id="event-loc" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="toggleModal('event-modal')" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-2xl max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-6">Add Gallery Image</h3>
+            <form id="image-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Image URL</label>
+                    <input type="url" id="img-url" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Caption</label>
+                    <input type="text" id="img-caption" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                    <input type="text" id="img-cat" class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Medical Camp" required>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="toggleModal('image-modal')" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition">Upload Image</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        async function loadEvents() {
+            const res = await fetch('/api/events');
+            const events = await res.json();
+            const body = document.getElementById('events-table-body');
+            body.innerHTML = events.map(e => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium">${e.title}</td>
+                    <td class="px-6 py-4 text-gray-500">${new Date(e.event_date).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 text-gray-500">${e.location}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="deleteEvent('${e.id}')" class="text-red-500 hover:text-red-700 font-medium">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function deleteEvent(id) {
+            if(!confirm('Are you sure?')) return;
+            await fetch('/api/admin/events?id=' + id, {
+                method: 'DELETE',
+                headers: { 'X-Admin-Token': 'secret-admin-token-123' }
+            });
+            loadEvents();
+        }
+
+        document.getElementById('event-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('event-title').value,
+                description: document.getElementById('event-desc').value,
+                event_date: document.getElementById('event-date').value,
+                location: document.getElementById('event-loc').value,
+            };
+            await fetch('/api/admin/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': 'secret-admin-token-123' },
+                body: JSON.stringify(data)
+            });
+            toggleModal('event-modal');
+            loadEvents();
+        };
+
+        async function loadGallery() {
+            const res = await fetch('/api/gallery');
+            const images = await res.json();
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = images.map(img => `
+                <div class="relative group overflow-hidden rounded-xl shadow-sm">
+                    <img src="${img.image_url}" class="w-full h-48 object-cover transition group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <button onclick="deleteImage('${img.id}')" class="bg-red-600 text-white px-3 py-1 rounded-md text-sm font-bold">Delete</button>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-2 bg-white bg-opacity-90 text-xs font-medium">
+                        ${img.caption || ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteImage(id) {
+            if(!confirm('Are you sure?')) return;
+            await fetch('/api/admin/gallery?id=' + id, {
+                method: 'DELETE',
+                headers: { 'X-Admin-Token': 'secret-admin-token-123' }
+            });
+            loadGallery();
+        }
+
+        document.getElementById('image-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = {
+                image_url: document.getElementById('img-url').value,
+                caption: document.getElementById('img-caption').value,
+                category: document.getElementById('img-cat').value,
+            };
+            await fetch('/api/admin/gallery', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': 'secret-admin-token-123' },
+                body: JSON.stringify(data)
+            });
+            toggleModal('image-modal');
+            loadGallery();
+        };
+
+        window.onload = () => {
+            loadEvents();
+            loadGallery();
+        };
+    </script>
+{{ end }}

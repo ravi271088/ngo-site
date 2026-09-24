@@ -1,0 +1,43 @@
+{{ define "content" }}
+<div class="relative bg-blue-700 text-white py-20 px-4 text-center">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">Bringing Hope and Healing to Every Home</h1>
+        <p class="text-xl mb-10 opacity-90">We provide free eye check-ups, medical camps, and educational support to those who need it most. Join us in making a difference.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="/events" class="bg-white text-blue-700 px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-100 transition">View Upcoming Events</a>
+            <a href="/donate" class="bg-green-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-green-600 transition">Donate Now</a>
+        </div>
+    </div>
+</div>
+
+<section class="py-20 px-4 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Core Impact</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">We believe health is a fundamental right. Our volunteers work tirelessly to reach the furthest corners of the community.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-6">
+                <i class="fas fa-eye"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Free Eye Camps</h3>
+            <p class="text-gray-600">Professional eye screenings and cataract surgeries for those unable to afford them.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-6">
+                <i class="fas fa-stethoscope"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">General Health Checkups</h3>
+            <p class="text-gray-600">Regular health monitoring and basic medicine distribution in rural areas.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+            <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center text-2xl mb-6">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Youth Education</h3>
+            <p class="text-gray-600">Providing books and tutoring to children to ensure a brighter, literate future.</p>
+        </div>
+    </div>
+</div>
+{{ end }}

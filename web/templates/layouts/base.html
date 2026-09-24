@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} | NGO Hope</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-blue-600">NGO <span class="text-green-600">Hope</span></a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="/" class="text-gray-600 hover:text-blue-600 font-medium transition">Home</a>
+                    <a href="/about" class="text-gray-600 hover:text-blue-600 font-medium transition">About Us</a>
+                    <a href="/events" class="text-gray-600 hover:text-blue-600 font-medium transition">Events</a>
+                    <a href="/gallery" class="text-gray-600 hover:text-blue-600 font-medium transition">Gallery</a>
+                    <a href="/contact" class="text-gray-600 hover:text-blue-600 font-medium transition">Contact</a>
+                    <a href="/donate" class="bg-blue-600 text-white px-4 py-2 rounded-full font-bold hover:bg-blue-700 transition">Donate Now</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {{ template "content" . }}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">NGO Hope</h3>
+                    <p class="text-gray-400">Dedicated to bringing health and education to the underserved communities.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-white">About Us</a></li>
+                        <li><a href="/events" class="hover:text-white">Upcoming Events</a></li>
+                        <li><a href="/contact" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4 text-2xl">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+                &copy; 2026 NGO Hope. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
