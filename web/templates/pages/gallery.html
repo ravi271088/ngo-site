@@ -1,0 +1,43 @@
+{{ define "content" }}
+<div class="py-20 px-4 max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Our Gallery</h1>
+        <p class="text-gray-600 max-w-2xl mx-auto">A glimpse into our work, the communities we serve, and the smiles we've helped create.</p>
+    </div>
+
+    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Images will be loaded here via JS -->
+        <div class="col-span-full text-center py-10 text-gray-500">Loading our memories...</div>
+    </div>
+</div>
+
+<script>
+    async function loadGallery() {
+        try {
+            const res = await fetch('/api/gallery');
+            const images = await res.json();
+            const grid = document.getElementById('gallery-grid');
+
+            if (images.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">Our gallery is currently empty. Stay tuned for updates!</div>';
+                return;
+            }
+
+            grid.innerHTML = images.map(img => `
+                <div class="group relative overflow-hidden rounded-2xl shadow-sm bg-white border border-gray-100 transition hover:shadow-lg">
+                    <img src="${img.image_url}" alt="${img.caption}" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                        <span class="text-green-400 text-xs font-bold uppercase tracking-wider mb-1">${img.category}</span>
+                        <p class="text-white text-sm font-medium">${img.caption || 'Impact in action'}</p>
+                    </div>
+                </div>
+            `).join('');
+        } catch (err) {
+            console.error('Error loading gallery:', err);
+            document.getElementById('gallery-grid').innerHTML = '<div class="col-span-full text-center py-10 text-red-500">Failed to load gallery. Please try again later.</div>';
+        }
+    }
+
+    window.onload = loadGallery;
+</script>
+{{ end }}

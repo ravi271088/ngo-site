@@ -90,6 +90,14 @@ func main() {
 		renderTemplate(w, "about", map[string]interface{}{"Title": "About Us"})
 	})
 
+	mux.HandleFunc("/events", func(w http.ResponseWriter, r *http.Request) {
+		renderTemplate(w, "events", map[string]interface{}{"Title": "Upcoming Events"})
+	})
+
+	mux.HandleFunc("/gallery", func(w http.ResponseWriter, r *http.Request) {
+		renderTemplate(w, "gallery", map[string]interface{}{"Title": "Our Gallery"})
+	})
+
 	mux.HandleFunc("/contact", func(w http.ResponseWriter, r *http.Request) {
 		renderTemplate(w, "contact", map[string]interface{}{"Title": "Contact Us"})
 	})
