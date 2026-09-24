@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"ngo-site/internal/models"
 	"ngo-site/internal/repository"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -45,15 +47,35 @@ func (h *AdminHandler) CreateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var event models.Event
-	if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
+	var input struct {
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		EventDate   string `json:"event_date"`
+		Location    string `json:"location"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	event.ID = uuid.New()
+	parsedDate, err := time.Parse("2006-01-02T15:04", input.EventDate)
+	if err != nil {
+		http.Error(w, "Invalid date format. Use YYYY-MM-DDTHH:MM", http.StatusBadRequest)
+		return
+	}
+
+	event := models.Event{
+		ID:          uuid.New(),
+		Title:       input.Title,
+		Description: input.Description,
+		EventDate:   parsedDate,
+		Location:    input.Location,
+		CreatedAt:   time.Now(),
+	}
+
 	if err := h.repo.CreateEvent(&event); err != nil {
-		http.Error(w, "Failed to create event", http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to create event: %v", err), http.StatusInternalServerError)
 		return
 	}
 
