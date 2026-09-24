@@ -12,32 +12,50 @@
 
 <section class="py-20 px-4 max-w-7xl mx-auto">
     <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Core Impact</h2>
-        <p class="text-gray-600 max-w-2xl mx-auto">We believe health is a fundamental right. Our volunteers work tirelessly to reach the furthest corners of the community.</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Latest Activities</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Stay updated with our most recent medical camps and community initiatives.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-6">
-                <i class="fas fa-eye"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3">Free Eye Camps</h3>
-            <p class="text-gray-600">Professional eye screenings and cataract surgeries for those unable to afford them.</p>
-        </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-6">
-                <i class="fas fa-stethoscope"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3">General Health Checkups</h3>
-            <p class="text-gray-600">Regular health monitoring and basic medicine distribution in rural areas.</p>
-        </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-            <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center text-2xl mb-6">
-                <i class="fas fa-book-open"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3">Youth Education</h3>
-            <p class="text-gray-600">Providing books and tutoring to children to ensure a brighter, literate future.</p>
-        </div>
+    <div id="latest-events" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Events will be loaded here via JS -->
+        <div class="col-span-full text-center py-10 text-gray-500">Loading upcoming events...</div>
     </div>
-</div>
+</section>
+
+<script>
+    async function loadLatestEvents() {
+        try {
+            const res = await fetch('/api/events');
+            const events = await res.json();
+            const container = document.getElementById('latest-events');
+
+            if (events.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No upcoming events scheduled at the moment.</div>';
+                return;
+            }
+
+            // Take only the first 3 events
+            const latest = events.slice(0, 3);
+            container.innerHTML = latest.map(e => `
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">${e.title}</h3>
+                    <p class="text-gray-600 mb-4">${e.description}</p>
+                    <div class="flex items-center text-sm text-gray-500 font-medium">
+                        <i class="fas fa-map-marker-alt mr-2"></i> ${e.location}
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-clock mr-2"></i> ${new Date(e.event_date).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+        } catch (err) {
+            console.error('Error loading events:', err);
+            document.getElementById('latest-events').innerHTML = '<div class="col-span-full text-center py-10 text-red-500">Failed to load events. Please try again later.</div>';
+        }
+    }
+
+    window.onload = loadLatestEvents;
+</script>
 {{ end }}

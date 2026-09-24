@@ -72,6 +72,10 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	// Public API Routes
+	mux.HandleFunc("/api/events", adminH.GetEvents)
+	mux.HandleFunc("/api/gallery", adminH.GetGallery)
+
 	// Public Routes
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
