@@ -3,9 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"ngo-site/internal/api/handler"
 	"ngo-site/internal/api/middleware"
@@ -13,6 +15,29 @@ import (
 
 	_ "github.com/lib/pq"
 )
+
+// renderTemplate is a helper to render a page using the base layout
+func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
+	// We parse both the base layout and the specific page template
+	files := []string{
+		"web/templates/layouts/base.html",
+		filepath.Join("web/templates/pages", tmpl+".html"),
+	}
+
+	t, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Printf("Template error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Execute the "base.html" template, which will include the "content" block
+	err = t.ExecuteTemplate(w, "base.html", data)
+	if err != nil {
+		log.Printf("Execution error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
 
 func main() {
 	port := os.Getenv("APP_PORT")
@@ -54,7 +79,19 @@ func main() {
 	})
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Welcome to the NGO Website!")
+		renderTemplate(w, "home", map[string]interface{}{"Title": "Home"})
+	})
+
+	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
+		renderTemplate(w, "about", map[string]interface{}{"Title": "About Us"})
+	})
+
+	mux.HandleFunc("/contact", func(w http.ResponseWriter, r *http.Request) {
+		renderTemplate(w, "contact", map[string]interface{}{"Title": "Contact Us"})
+	})
+
+	mux.HandleFunc("/donate", func(w http.ResponseWriter, r *http.Request) {
+		renderTemplate(w, "donate", map[string]interface{}{"Title": "Donate Now"})
 	})
 
 	// Admin API Routes (Protected)

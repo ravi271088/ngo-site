@@ -1,17 +1,17 @@
 # Build stage
-FROM golang:1.23-alpine AS builder
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /app
 
-# Copy go mod and sum files
+# Copy the dependency files
 COPY go.mod go.sum* ./
-RUN go mod download
+COPY vendor/ ./vendor/
 
-# Copy the rest of the source code
+# Copy ALL source code first to avoid "directory not found" errors
 COPY . .
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server/main.go
+# Build the application using the vendor folder
+RUN CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o server ./cmd/server/main.go
 
 # Final stage
 FROM alpine:latest
